@@ -1,0 +1,47 @@
+services:
+  clickstack:
+    image: clickhouse/clickstack-all-in-one:latest
+    container_name: clickstack
+    ports:
+      - "8123:8123"   
+      - "9000:9000"   
+      - "8080:8080"   
+      - "4317:4317"
+      - "4318:4318"
+    environment:
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./config/config.xml:/etc/clickhouse-server/config.d/custom.xml
+      - ./init:/init
+    networks:
+      - shared
+    command: >
+      bash -c "
+      clickstack &
+      until clickhouse-client --host ch-server --query='SELECT 1' >/dev/null 2>&1; do
+        echo 'Waiting for ClickHouse...';
+        sleep 2;
+      done;
+      echo 'Running init.sql...';
+      cat /init/init.sql;
+      clickhouse-client --host ch-server < /init/init.sql;
+      echo 'Init done';
+      wait
+      "
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - clickstack
+    networks:
+      - shared
+
+volumes:
+  clickhouse_data:
+
+networks:
+  shared:
