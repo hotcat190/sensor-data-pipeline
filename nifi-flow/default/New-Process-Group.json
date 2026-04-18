@@ -49,6 +49,36 @@
       "destination" : {
         "comments" : "",
         "groupId" : "flow-contents-group",
+        "id" : "a0437b5e-019d-1000-3a5f-1bebae30b3c4",
+        "name" : "LogAttribute",
+        "type" : "PROCESSOR"
+      },
+      "flowFileExpiration" : "0 sec",
+      "groupIdentifier" : "flow-contents-group",
+      "identifier" : "30861708-4056-38db-b7d5-f782bcb15bcb",
+      "labelIndex" : 0,
+      "loadBalanceCompression" : "DO_NOT_COMPRESS",
+      "loadBalanceStrategy" : "DO_NOT_LOAD_BALANCE",
+      "name" : "",
+      "partitioningAttribute" : "",
+      "prioritizers" : [ ],
+      "selectedRelationships" : [ "Failure", "No Retry", "Retry" ],
+      "source" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
+        "id" : "80c01cda-019d-1000-5c80-797acb681bc2",
+        "name" : "InvokeHTTP_weatherapi",
+        "type" : "PROCESSOR"
+      },
+      "zIndex" : 24
+    }, {
+      "backPressureDataSizeThreshold" : "1 GB",
+      "backPressureObjectThreshold" : 10000,
+      "bends" : [ ],
+      "componentType" : "CONNECTION",
+      "destination" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
         "id" : "a01e5a30-019d-1000-8dbc-cf3925900850",
         "name" : "LogAttribute",
         "type" : "PROCESSOR"
@@ -491,6 +521,39 @@
         "type" : "PROCESSOR"
       },
       "zIndex" : 6
+    }, {
+      "backPressureDataSizeThreshold" : "1 GB",
+      "backPressureObjectThreshold" : 10000,
+      "bends" : [ {
+        "x" : 136.0,
+        "y" : -920.0
+      } ],
+      "componentType" : "CONNECTION",
+      "destination" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
+        "id" : "a043b15f-019d-1000-b8e0-a40635461769",
+        "name" : "LogAttribute",
+        "type" : "PROCESSOR"
+      },
+      "flowFileExpiration" : "0 sec",
+      "groupIdentifier" : "flow-contents-group",
+      "identifier" : "ff1ba16c-d281-3ba0-b0fc-faf1c46838a9",
+      "labelIndex" : 0,
+      "loadBalanceCompression" : "DO_NOT_COMPRESS",
+      "loadBalanceStrategy" : "DO_NOT_LOAD_BALANCE",
+      "name" : "",
+      "partitioningAttribute" : "",
+      "prioritizers" : [ ],
+      "selectedRelationships" : [ "Failure", "No Retry", "Retry" ],
+      "source" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
+        "id" : "930c38ce-aedf-3e43-8797-235cfd9c378e",
+        "name" : "InvokeHTTP_openweathermap",
+        "type" : "PROCESSOR"
+      },
+      "zIndex" : 23
     } ],
     "controllerServices" : [ {
       "bulletinLevel" : "WARN",
@@ -1164,7 +1227,7 @@
       "name" : "SplitJson",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : -1576.0,
+        "x" : -1536.0,
         "y" : -656.0
       },
       "properties" : {
@@ -1607,7 +1670,7 @@
       "type" : "org.apache.nifi.processors.standard.ControlRate",
       "yieldDuration" : "1 sec"
     }, {
-      "autoTerminatedRelationships" : [ "Failure", "No Retry", "Original", "Retry" ],
+      "autoTerminatedRelationships" : [ "Original" ],
       "backoffMechanism" : "PENALIZE_FLOWFILE",
       "bulletinLevel" : "WARN",
       "bundle" : {
@@ -2115,7 +2178,7 @@
       "type" : "org.apache.nifi.processors.jolt.JoltTransformJSON",
       "yieldDuration" : "1 sec"
     }, {
-      "autoTerminatedRelationships" : [ "Failure", "No Retry", "Original", "Retry" ],
+      "autoTerminatedRelationships" : [ "Original" ],
       "backoffMechanism" : "PENALIZE_FLOWFILE",
       "bulletinLevel" : "WARN",
       "bundle" : {
@@ -2134,7 +2197,7 @@
       "penaltyDuration" : "30 sec",
       "position" : {
         "x" : -40.0,
-        "y" : -864.0
+        "y" : -856.0
       },
       "properties" : {
         "Request Content-Encoding" : "DISABLED",
@@ -2453,7 +2516,7 @@
         "File Size" : "0B",
         "Batch Size" : "1",
         "Unique FlowFiles" : "false",
-        "Custom Text" : "[\n  {\"city\": \"Hanoi\"},\n  {\"city\": \"Ho Chi Minh City\"},\n  {\"city\": \"Da Nang\"},\n  {\"city\": \"London\"},\n  {\"city\": \"New York\"},\n  {\"city\": \"Tokyo\"}\n]",
+        "Custom Text" : "[\n  {\"city\": \"Hanoi\"}, {\"city\": \"Ho Chi Minh City\"}, {\"city\": \"Da Nang\"}, {\"city\": \"Haiphong\"}, {\"city\": \"Can Tho\"}, \n  {\"city\": \"Hue\"}, {\"city\": \"Nha Trang\"}, {\"city\": \"Da Lat\"}, {\"city\": \"Vung Tau\"}, {\"city\": \"Ha Long\"},\n  {\"city\": \"Tokyo\"}, {\"city\": \"Osaka\"}, {\"city\": \"Seoul\"}, {\"city\": \"Busan\"}, {\"city\": \"Bangkok\"}, \n  {\"city\": \"Singapore\"}, {\"city\": \"Kuala Lumpur\"}, {\"city\": \"Jakarta\"}, {\"city\": \"Manila\"}, {\"city\": \"Taipei\"},\n  {\"city\": \"Beijing\"}, {\"city\": \"Shanghai\"}, {\"city\": \"Hong Kong\"}, {\"city\": \"New Delhi\"}, {\"city\": \"Mumbai\"}, \n  {\"city\": \"Dubai\"}, {\"city\": \"Abu Dhabi\"}, {\"city\": \"Doha\"}, {\"city\": \"Riyadh\"}, {\"city\": \"Istanbul\"},\n  {\"city\": \"London\"}, {\"city\": \"Manchester\"}, {\"city\": \"Paris\"}, {\"city\": \"Lyon\"}, {\"city\": \"Berlin\"}, \n  {\"city\": \"Munich\"}, {\"city\": \"Rome\"}, {\"city\": \"Milan\"}, {\"city\": \"Madrid\"}, {\"city\": \"Barcelona\"},\n  {\"city\": \"Amsterdam\"}, {\"city\": \"Brussels\"}, {\"city\": \"Vienna\"}, {\"city\": \"Zurich\"}, {\"city\": \"Stockholm\"}, \n  {\"city\": \"Oslo\"}, {\"city\": \"Copenhagen\"}, {\"city\": \"Helsinki\"}, {\"city\": \"Moscow\"}, {\"city\": \"Warsaw\"},\n  {\"city\": \"New York\"}, {\"city\": \"Los Angeles\"}, {\"city\": \"Chicago\"}, {\"city\": \"Toronto\"}, {\"city\": \"Vancouver\"}, \n  {\"city\": \"Sydney\"}, {\"city\": \"Melbourne\"}, {\"city\": \"Auckland\"}, {\"city\": \"Cairo\"}, {\"city\": \"Cape Town\"}\n]",
         "Character Set" : "UTF-8",
         "Data Format" : "Text"
       },
@@ -2851,6 +2914,228 @@
       "type" : "org.apache.nifi.processors.standard.LogAttribute",
       "yieldDuration" : "1 sec"
     }, {
+      "autoTerminatedRelationships" : [ "success" ],
+      "backoffMechanism" : "PENALIZE_FLOWFILE",
+      "bulletinLevel" : "WARN",
+      "bundle" : {
+        "artifact" : "nifi-standard-nar",
+        "group" : "org.apache.nifi",
+        "version" : "2.8.0"
+      },
+      "comments" : "",
+      "componentType" : "PROCESSOR",
+      "concurrentlySchedulableTaskCount" : 1,
+      "executionNode" : "ALL",
+      "groupIdentifier" : "flow-contents-group",
+      "identifier" : "a0437b5e-019d-1000-3a5f-1bebae30b3c4",
+      "maxBackoffPeriod" : "10 mins",
+      "name" : "LogAttribute",
+      "penaltyDuration" : "30 sec",
+      "position" : {
+        "x" : -24.0,
+        "y" : -144.0
+      },
+      "properties" : {
+        "Log FlowFile Properties" : "true",
+        "Log Level" : "info",
+        "Output Format" : "Line per Attribute",
+        "Log Payload" : "false",
+        "Character Set" : "UTF-8",
+        "Attributes to Log Regular Expression" : ".*"
+      },
+      "propertyDescriptors" : {
+        "Log FlowFile Properties" : {
+          "displayName" : "Log FlowFile Properties",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log FlowFile Properties",
+          "sensitive" : false
+        },
+        "Log Level" : {
+          "displayName" : "Log Level",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log Level",
+          "sensitive" : false
+        },
+        "Attributes to Ignore" : {
+          "displayName" : "Attributes to Ignore",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Ignore",
+          "sensitive" : false
+        },
+        "Attributes to Log" : {
+          "displayName" : "Attributes to Log",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Log",
+          "sensitive" : false
+        },
+        "Attributes to Ignore Regular Expression" : {
+          "displayName" : "Attributes to Ignore Regular Expression",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Ignore Regular Expression",
+          "sensitive" : false
+        },
+        "Output Format" : {
+          "displayName" : "Output Format",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Output Format",
+          "sensitive" : false
+        },
+        "Log Payload" : {
+          "displayName" : "Log Payload",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log Payload",
+          "sensitive" : false
+        },
+        "Log Prefix" : {
+          "displayName" : "Log Prefix",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log Prefix",
+          "sensitive" : false
+        },
+        "Character Set" : {
+          "displayName" : "Character Set",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Character Set",
+          "sensitive" : false
+        },
+        "Attributes to Log Regular Expression" : {
+          "displayName" : "Attributes to Log Regular Expression",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Log Regular Expression",
+          "sensitive" : false
+        }
+      },
+      "retriedRelationships" : [ ],
+      "retryCount" : 10,
+      "runDurationMillis" : 25,
+      "scheduledState" : "ENABLED",
+      "schedulingPeriod" : "0 sec",
+      "schedulingStrategy" : "TIMER_DRIVEN",
+      "style" : { },
+      "type" : "org.apache.nifi.processors.standard.LogAttribute",
+      "yieldDuration" : "1 sec"
+    }, {
+      "autoTerminatedRelationships" : [ "success" ],
+      "backoffMechanism" : "PENALIZE_FLOWFILE",
+      "bulletinLevel" : "WARN",
+      "bundle" : {
+        "artifact" : "nifi-standard-nar",
+        "group" : "org.apache.nifi",
+        "version" : "2.8.0"
+      },
+      "comments" : "",
+      "componentType" : "PROCESSOR",
+      "concurrentlySchedulableTaskCount" : 1,
+      "executionNode" : "ALL",
+      "groupIdentifier" : "flow-contents-group",
+      "identifier" : "a043b15f-019d-1000-b8e0-a40635461769",
+      "maxBackoffPeriod" : "10 mins",
+      "name" : "LogAttribute",
+      "penaltyDuration" : "30 sec",
+      "position" : {
+        "x" : -40.0,
+        "y" : -1104.0
+      },
+      "properties" : {
+        "Log FlowFile Properties" : "true",
+        "Log Level" : "info",
+        "Output Format" : "Line per Attribute",
+        "Log Payload" : "false",
+        "Character Set" : "UTF-8",
+        "Attributes to Log Regular Expression" : ".*"
+      },
+      "propertyDescriptors" : {
+        "Log FlowFile Properties" : {
+          "displayName" : "Log FlowFile Properties",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log FlowFile Properties",
+          "sensitive" : false
+        },
+        "Log Level" : {
+          "displayName" : "Log Level",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log Level",
+          "sensitive" : false
+        },
+        "Attributes to Ignore" : {
+          "displayName" : "Attributes to Ignore",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Ignore",
+          "sensitive" : false
+        },
+        "Attributes to Log" : {
+          "displayName" : "Attributes to Log",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Log",
+          "sensitive" : false
+        },
+        "Attributes to Ignore Regular Expression" : {
+          "displayName" : "Attributes to Ignore Regular Expression",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Ignore Regular Expression",
+          "sensitive" : false
+        },
+        "Output Format" : {
+          "displayName" : "Output Format",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Output Format",
+          "sensitive" : false
+        },
+        "Log Payload" : {
+          "displayName" : "Log Payload",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log Payload",
+          "sensitive" : false
+        },
+        "Log Prefix" : {
+          "displayName" : "Log Prefix",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Log Prefix",
+          "sensitive" : false
+        },
+        "Character Set" : {
+          "displayName" : "Character Set",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Character Set",
+          "sensitive" : false
+        },
+        "Attributes to Log Regular Expression" : {
+          "displayName" : "Attributes to Log Regular Expression",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Attributes to Log Regular Expression",
+          "sensitive" : false
+        }
+      },
+      "retriedRelationships" : [ ],
+      "retryCount" : 10,
+      "runDurationMillis" : 25,
+      "scheduledState" : "ENABLED",
+      "schedulingPeriod" : "0 sec",
+      "schedulingStrategy" : "TIMER_DRIVEN",
+      "style" : { },
+      "type" : "org.apache.nifi.processors.standard.LogAttribute",
+      "yieldDuration" : "1 sec"
+    }, {
       "autoTerminatedRelationships" : [ "failure", "unmatched" ],
       "backoffMechanism" : "PENALIZE_FLOWFILE",
       "bulletinLevel" : "WARN",
@@ -3077,6 +3362,6 @@
   "snapshotMetadata" : {
     "author" : "admin",
     "flowIdentifier" : "New-Process-Group",
-    "timestamp" : 1776509336996
+    "timestamp" : 1776512346563
   }
 }
