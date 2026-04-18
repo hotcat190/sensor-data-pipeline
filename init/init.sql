@@ -69,45 +69,35 @@ PARTITION BY toYYYYMM(timestamp)
 ORDER BY (country, city, timestamp);
 
 -- Materialized View
-CREATE MATERIALIZED VIEW mv_env_sensor_metrics
+CREATE MATERIALIZED VIEW IF NOT EXISTS mv_env_sensor_metrics
 TO environmental_data
 AS
 SELECT
-    toDateTime(JSONExtractInt(raw, 'dt')) AS timestamp,
-
-    JSONExtractString(JSONExtractRaw(raw, 'sys'), 'country') AS country,
-    JSONExtractString(raw, 'name') AS city,
-
-    JSONExtractFloat(JSONExtractRaw(raw, 'coord'), 'lat') AS lat,
-    JSONExtractFloat(JSONExtractRaw(raw, 'coord'), 'lon') AS lon,
-
-    JSONExtractString(JSONExtractArrayRaw(raw, 'weather')[1], 'main') AS weather_main,
-    JSONExtractString(JSONExtractArrayRaw(raw, 'weather')[1], 'description') AS weather_desc,
-    JSONExtractString(JSONExtractArrayRaw(raw, 'weather')[1], 'icon') AS weather_icon,
-
-    JSONExtractFloat(JSONExtractRaw(raw, 'main'), 'temp') - 273.15 AS temp,
-    JSONExtractFloat(JSONExtractRaw(raw, 'main'), 'feels_like') - 273.15 AS feels_like,
-    JSONExtractFloat(JSONExtractRaw(raw, 'main'), 'temp_min') - 273.15 AS temp_min,
-    JSONExtractFloat(JSONExtractRaw(raw, 'main'), 'temp_max') - 273.15 AS temp_max,
-
-    JSONExtractUInt(JSONExtractRaw(raw, 'main'), 'pressure') AS pressure,
-    JSONExtractUInt(JSONExtractRaw(raw, 'main'), 'humidity') AS humidity,
-    JSONExtractUInt(JSONExtractRaw(raw, 'main'), 'sea_level') AS sea_level,
-    JSONExtractUInt(JSONExtractRaw(raw, 'main'), 'grnd_level') AS grnd_level,
-
-    JSONExtractFloat(JSONExtractRaw(raw, 'wind'), 'speed') AS wind_speed,
-    JSONExtractUInt(JSONExtractRaw(raw, 'wind'), 'deg') AS wind_deg,
-    ifNull(JSONExtractFloat(JSONExtractRaw(raw, 'wind'), 'gust'), 0.0) AS wind_gust,
-
-    ifNull(JSONExtractFloat(JSONExtractRaw(raw, 'rain'), '1h'), 0.0) AS rain_1h,
-    ifNull(JSONExtractFloat(JSONExtractRaw(raw, 'snow'), '1h'), 0.0) AS snow_1h,
-
-    JSONExtractUInt(JSONExtractRaw(raw, 'clouds'), 'all') AS clouds_all,
-    ifNull(JSONExtractUInt(raw, 'visibility'), 10000) AS visibility,
-
-    toDateTime(JSONExtractInt(JSONExtractRaw(raw, 'sys'), 'sunrise')) AS sunrise,
-    toDateTime(JSONExtractInt(JSONExtractRaw(raw, 'sys'), 'sunset')) AS sunset,
-
-    JSONExtractUInt(raw, 'id') AS station_id,
+    toDateTime(JSONExtractInt(raw, 'timestamp')) AS timestamp,
+    JSONExtractString(raw, 'country') AS country,
+    JSONExtractString(raw, 'city') AS city,
+    JSONExtractFloat(raw, 'lat') AS lat,
+    JSONExtractFloat(raw, 'lon') AS lon,
+    JSONExtractString(raw, 'weather_main') AS weather_main,
+    JSONExtractString(raw, 'weather_desc') AS weather_desc,
+    JSONExtractString(raw, 'weather_icon') AS weather_icon,
+    JSONExtractFloat(raw, 'temp') AS temp,
+    JSONExtractFloat(raw, 'feels_like') AS feels_like,
+    JSONExtractFloat(raw, 'temp_min') AS temp_min,
+    JSONExtractFloat(raw, 'temp_max') AS temp_max,
+    JSONExtractUInt(raw, 'pressure') AS pressure,
+    JSONExtractUInt(raw, 'humidity') AS humidity,
+    JSONExtractUInt(raw, 'sea_level') AS sea_level,
+    JSONExtractUInt(raw, 'grnd_level') AS grnd_level,
+    JSONExtractFloat(raw, 'wind_speed') AS wind_speed,
+    JSONExtractUInt(raw, 'wind_deg') AS wind_deg,
+    JSONExtractFloat(raw, 'wind_gust') AS wind_gust,
+    JSONExtractFloat(raw, 'rain_1h') AS rain_1h,
+    JSONExtractFloat(raw, 'snow_1h') AS snow_1h,
+    JSONExtractUInt(raw, 'clouds_all') AS clouds_all,
+    JSONExtractUInt(raw, 'visibility') AS visibility,
+    toDateTime(JSONExtractInt(raw, 'sunrise')) AS sunrise,
+    toDateTime(JSONExtractInt(raw, 'sunset')) AS sunset,
+    JSONExtractUInt(raw, 'station_id') AS station_id,
     JSONExtractInt(raw, 'timezone') AS timezone
 FROM kafka_env_sensor_metrics;
