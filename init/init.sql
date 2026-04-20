@@ -101,3 +101,24 @@ SELECT
     JSONExtractUInt(raw, 'station_id') AS station_id,
     JSONExtractInt(raw, 'timezone') AS timezone
 FROM kafka_env_sensor_metrics;
+
+-- BME Performance Test Schema
+CREATE DATABASE IF NOT EXISTS sensor_storage;
+
+CREATE TABLE IF NOT EXISTS sensor_storage.bme280_data
+(
+    sensor_id UInt32,
+    sensor_type LowCardinality(String),
+    location UInt32,
+    lat Float32,
+    lon Float32,
+    timestamp DateTime,
+    pressure Float32 CODEC(DoubleDelta, LZ4),
+    altitude Nullable(Float32),
+    pressure_sealevel Nullable(Float32),
+    temperature Float32 CODEC(DoubleDelta, LZ4),
+    humidity Float32 CODEC(DoubleDelta, LZ4)
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(timestamp)
+ORDER BY (sensor_id, timestamp);

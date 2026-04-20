@@ -61,7 +61,7 @@ services:
     environment:
     - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
     volumes:
-      - grafana_data:/var/lib/grafana
+      # - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
@@ -71,7 +71,7 @@ services:
 
 volumes:
   clickhouse_data:
-  grafana_data:
+  # grafana_data:
 
 networks:
   shared:

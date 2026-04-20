@@ -34,4 +34,6 @@
 	- Drag and Drop the Import from Registry icon from the tool bar to the canvas, the Import From Registry window will show up.
 	- Pick the right Registry, Bucket and Flow, then click Import.
 
-	
+# Demo note
+- BME:
+	- compression codecs: DoubleDelta, LZ4
