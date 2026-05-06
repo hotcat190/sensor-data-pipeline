@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS sensor_storage.bme280_data
 )
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(timestamp)
-ORDER BY (sensor_id, timestamp);
+ORDER BY (location, timestamp, sensor_id);
 
 CREATE TABLE IF NOT EXISTS sensor_storage.sds011_data
 (
@@ -140,5 +140,37 @@ CREATE TABLE IF NOT EXISTS sensor_storage.sds011_data
 )
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(timestamp)
-ORDER BY (sensor_id, timestamp);
-
+ORDER BY (location, timestamp, sensor_id);
+
+-- 1. Create flat target table for pre-joined analytics
+CREATE TABLE IF NOT EXISTS sensor_storage.combined_data
+(
+    location UInt32,
+    timestamp DateTime,
+    pm25 Float32,
+    pm10 Float32,
+    temperature Float32,
+    humidity Float32,
+    pressure Float32
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(timestamp)
+ORDER BY (location, timestamp);
+
+-- 2. Create Materialized View to join data on the fly
+-- This triggers whenever data is inserted into sds011_data
+CREATE MATERIALIZED VIEW IF NOT EXISTS sensor_storage.mv_sds_join_bme
+TO sensor_storage.combined_data
+AS
+SELECT
+    s.location,
+    s.timestamp,
+    s.P2 AS pm25,
+    s.P1 AS pm10,
+    b.temperature,
+    b.humidity,
+    b.pressure
+FROM sensor_storage.sds011_data AS s
+ASOF LEFT JOIN sensor_storage.bme280_data AS b
+    ON s.location = b.location AND s.timestamp >= b.timestamp;
+
