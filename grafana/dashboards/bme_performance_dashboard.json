@@ -427,7 +427,7 @@
         },
         "showHeader": true
       },
-      "title": "Sudden PM2.5 Spikes (>50%)",
+      "title": "Sustained Dangerous PM2.5 (>50 µg/m³)",
       "type": "table",
       "targets": [
         {
@@ -437,7 +437,7 @@
           },
           "format": 0,
           "queryType": "sql",
-          "rawSql": "SELECT * FROM (SELECT timestamp, pm25, lag(pm25) OVER (ORDER BY timestamp ASC) as prev_pm25, round(abs(pm25 - prev_pm25) / (prev_pm25 + 0.1) * 100, 2) AS percent_change FROM sensor_storage.combined_data WHERE location = '$location' AND $__timeFilter(timestamp)) WHERE prev_pm25 > 0 AND percent_change > 50 ORDER BY timestamp DESC LIMIT 20 SETTINGS use_query_cache = 0",
+          "rawSql": "SELECT timestamp, pm25 FROM (\n    SELECT \n        timestamp, \n        pm25, \n        lead(pm25, 1) OVER (ORDER BY timestamp ASC) as next_1, \n        lead(pm25, 2) OVER (ORDER BY timestamp ASC) as next_2 \n    FROM sensor_storage.combined_data \n    WHERE location = '$location' AND $__timeFilter(timestamp)\n) \nWHERE pm25 > 150 AND next_1 > 150 AND next_2 > 150 \nORDER BY timestamp DESC \nLIMIT 20 \nSETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
