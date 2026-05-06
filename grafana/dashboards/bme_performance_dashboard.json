@@ -473,7 +473,7 @@
           "values": false
         }
       },
-      "title": "Air Cleanse Events (High Humidity -> Low Dust)",
+      "title": "Top 10 Hottest Locations (Average)",
       "type": "table",
       "targets": [
         {
@@ -483,7 +483,7 @@
           },
           "format": 0,
           "queryType": "sql",
-          "rawSql": "SELECT level, count() AS num_events FROM (SELECT windowFunnel(1800)(timestamp, humidity > 90, pm25 < 15) AS level FROM (SELECT timestamp, humidity, pm25 FROM sensor_storage.combined_data WHERE location = '$location' AND $__timeFilter(timestamp) ORDER BY timestamp ASC)) GROUP BY level ORDER BY level SETTINGS use_query_cache = 0",
+          "rawSql": "SELECT \n    location, \n    round(avg(temperature), 2) AS avg_temperature, \n    round(avg(humidity), 2) AS avg_humidity \nFROM sensor_storage.combined_data \nWHERE $__timeFilter(timestamp) AND temperature > 0\nGROUP BY location \nORDER BY avg_temperature DESC \nLIMIT 10 \nSETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
