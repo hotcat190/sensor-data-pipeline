@@ -31,9 +31,11 @@ load_combined_data() {
     TEMP_FILE="/tmp/$filename"
     docker cp "$CSV_FILE" "$CONTAINER_NAME:$TEMP_FILE"
 
-    # 2. Use ClickHouse native FROM INFILE for maximum speed
+    # 2. Use ClickHouse native FROM INFILE with error tolerance
     docker exec "$CONTAINER_NAME" clickhouse-client \
         --query="INSERT INTO $DATABASE.$table FROM INFILE '$TEMP_FILE' FORMAT CSVWithNames" \
+        --input_format_allow_errors_num=100000 \
+        --input_format_allow_errors_ratio=0.1 \
         --format_csv_delimiter ';'
 
     # 3. Cleanup temp file in container

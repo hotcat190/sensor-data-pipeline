@@ -5,19 +5,32 @@ import gzip
 import io
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import json
 
 # Configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BASE_DIR)
 
-SENSORS = [
+# Load sensor IDs from JSON file
+json_path = os.path.join(BASE_DIR, "sensor_lists.json")
+try:
+    with open(json_path, "r") as f:
+        sensor_data = json.load(f)
+        BME_IDS = sensor_data.get("bme", [])
+        SDS_IDS = sensor_data.get("sds", [])
+except Exception as e:
+    print(f"Error loading {json_path}: {e}")
+    BME_IDS = []
+    SDS_IDS = []
+
+SENSORS_CONFIG = [
     {
-        "id": "829",
+        "ids": BME_IDS,
         "type": "bme280",
         "dest": os.path.join(PROJECT_ROOT, "clickhouse-bme-data")
     },
     {
-        "id": "828",
+        "ids": SDS_IDS,
         "type": "sds011",
         "dest": os.path.join(PROJECT_ROOT, "clickhouse-sds-data")
     }
@@ -25,7 +38,7 @@ SENSORS = [
 
 BASE_URL = "https://archive.sensor.community"
 START_DATE = datetime.date(2017, 4, 1)
-END_DATE = datetime.date(2026, 4, 27)  # Current date in simulation
+END_DATE = datetime.date(2026, 5, 2)  # Current date in simulation
 
 def download_file(date_obj, sensor):
     date_str = date_obj.strftime("%Y-%m-%d")
@@ -89,19 +102,26 @@ def main():
         curr += datetime.timedelta(days=1)
     
     total_dates = len(date_list)
-    total_tasks = total_dates * len(SENSORS)
-    print(f"Total tasks to schedule: {total_tasks} ({total_dates} days x {len(SENSORS)} sensors)", flush=True)
+    total_sensors = sum(len(cfg["ids"]) for cfg in SENSORS_CONFIG)
+    total_tasks = total_dates * total_sensors
+    print(f"Total tasks to schedule: {total_tasks} ({total_dates} days x {total_sensors} total sensors)", flush=True)
 
     print(f"Starting ThreadPoolExecutor with 10 workers...", flush=True)
     futures = {}
     with ThreadPoolExecutor(max_workers=10) as executor:
         print("Submitting tasks to executor...", flush=True)
         for i, date_obj in enumerate(date_list):
-            for sensor in SENSORS:
-                fut = executor.submit(download_file, date_obj, sensor)
-                futures[fut] = (date_obj, sensor)
-            if (i + 1) % 500 == 0:
-                print(f"  Scheduled { (i+1) * len(SENSORS) } / {total_tasks} tasks...", flush=True)
+            for sensor_cfg in SENSORS_CONFIG:
+                for s_id in sensor_cfg["ids"]:
+                    sensor = {
+                        "id": s_id,
+                        "type": sensor_cfg["type"],
+                        "dest": sensor_cfg["dest"]
+                    }
+                    fut = executor.submit(download_file, date_obj, sensor)
+                    futures[fut] = (date_obj, sensor)
+            if (i + 1) % 100 == 0:
+                print(f"  Scheduled tasks for {i+1} / {total_dates} days...", flush=True)
         
         print("All tasks scheduled. Waiting for first results...", flush=True)
         

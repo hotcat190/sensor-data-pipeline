@@ -363,7 +363,7 @@
           },
           "format": 1,
           "queryType": "sql",
-          "rawSql": "SELECT \n    s.timestamp AS time,\n    s.P2 AS pm25,\n    s.P1 AS pm10,\n    b.temperature,\n    b.humidity\nFROM sensor_storage.sds011_data AS s\nASOF LEFT JOIN sensor_storage.bme280_data AS b \n    ON s.location = b.location AND s.timestamp >= b.timestamp\nWHERE s.timestamp >= '2026-04-17 00:00:00' AND s.timestamp < '2026-04-18 00:00:00'\nORDER BY s.timestamp ASC\nSETTINGS use_query_cache = 0",
+          "rawSql": "SELECT \n    s.timestamp AS time,\n    s.P2 AS pm25,\n    s.P1 AS pm10,\n    b.temperature,\n    b.humidity\nFROM sensor_storage.sds011_data AS s\nASOF LEFT JOIN sensor_storage.bme280_data AS b \n    ON s.location = b.location AND s.timestamp >= b.timestamp\nWHERE s.location = '$location' AND s.timestamp >= $__fromTime AND s.timestamp < $__toTime\nORDER BY s.timestamp ASC\nSETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
@@ -423,7 +423,7 @@
           },
           "format": 0,
           "queryType": "sql",
-          "rawSql": "SELECT * FROM (SELECT timestamp, P2 as pm25, lag(P2) OVER (ORDER BY timestamp ASC) as prev_pm25, round(abs(P2 - prev_pm25) / (prev_pm25 + 0.1) * 100, 2) AS percent_change FROM sensor_storage.sds011_data) WHERE prev_pm25 > 0 AND percent_change > 50 ORDER BY timestamp DESC LIMIT 20 SETTINGS use_query_cache = 0",
+          "rawSql": "SELECT * FROM (SELECT timestamp, P2 as pm25, lag(P2) OVER (ORDER BY timestamp ASC) as prev_pm25, round(abs(P2 - prev_pm25) / (prev_pm25 + 0.1) * 100, 2) AS percent_change FROM sensor_storage.sds011_data WHERE location = '$location' AND timestamp >= $__fromTime AND timestamp < $__toTime) WHERE prev_pm25 > 0 AND percent_change > 50 ORDER BY timestamp DESC LIMIT 20 SETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
@@ -469,7 +469,7 @@
           },
           "format": 0,
           "queryType": "sql",
-          "rawSql": "SELECT level, count() AS num_events FROM (SELECT windowFunnel(1800)(timestamp, humidity > 90, P2 < 15) AS level FROM (SELECT s.timestamp, b.humidity, s.P2 FROM sensor_storage.sds011_data AS s ASOF LEFT JOIN sensor_storage.bme280_data AS b ON s.location = b.location AND s.timestamp >= b.timestamp ORDER BY s.timestamp ASC)) GROUP BY level ORDER BY level SETTINGS use_query_cache = 0",
+          "rawSql": "SELECT level, count() AS num_events FROM (SELECT windowFunnel(1800)(timestamp, humidity > 90, P2 < 15) AS level FROM (SELECT s.timestamp, b.humidity, s.P2 FROM sensor_storage.sds011_data AS s ASOF LEFT JOIN sensor_storage.bme280_data AS b ON s.location = b.location AND s.timestamp >= b.timestamp WHERE s.location = '$location' AND s.timestamp >= $__fromTime AND s.timestamp < $__toTime ORDER BY s.timestamp ASC)) GROUP BY level ORDER BY level SETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
@@ -484,6 +484,30 @@
     "sds011",
     "analytics"
   ],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ClickHouse"
+        },
+        "definition": "SELECT DISTINCT location FROM sensor_storage.sds011_data",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Location",
+        "multi": false,
+        "name": "location",
+        "options": [],
+        "query": "SELECT DISTINCT location FROM sensor_storage.sds011_data",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
   "time": {
     "from": "2026-04-17T00:00:00Z",
     "to": "2026-04-17T23:59:59Z"
