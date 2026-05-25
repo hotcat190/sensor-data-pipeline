@@ -1,0 +1,110 @@
+{
+    "flowContents": {
+        "identifier": "sensor-pipeline-group",
+        "name": "High-Performance IoT Sensor Ingestion",
+        "controllerServices": [
+            {
+                "identifier": "csv-reader",
+                "name": "CSVReader",
+                "type": "org.apache.nifi.csv.CSVReader",
+                "properties": {
+                    "Schema Access Strategy": "Use String Fields From Header",
+                    "Treat First Line as Header": "true",
+                    "Ignore CSV Header Column Names": "false"
+                }
+            },
+            {
+                "identifier": "json-writer",
+                "name": "JsonRecordSetWriter",
+                "type": "org.apache.nifi.json.JsonRecordSetWriter",
+                "properties": {
+                    "Schema Write Strategy": "Do Not Write Schema",
+                    "Output Grouping": "Array"
+                }
+            }
+        ],
+        "processors": [
+            {
+                "identifier": "list-file",
+                "name": "ListFile",
+                "type": "org.apache.nifi.processors.standard.ListFile",
+                "properties": {
+                    "Input Directory": "/input-drop-zone",
+                    "File Filter": "[^\\.].*\\.csv"
+                }
+            },
+            {
+                "identifier": "fetch-file",
+                "name": "FetchFile",
+                "type": "org.apache.nifi.processors.standard.FetchFile",
+                "properties": {
+                    "Completion Strategy": "None"
+                }
+            },
+            {
+                "identifier": "query-record",
+                "name": "QueryRecord",
+                "type": "org.apache.nifi.processors.standard.QueryRecord",
+                "properties": {
+                    "Record Reader": "csv-reader",
+                    "Record Writer": "csv-writer",
+                    "valid_records": "SELECT * FROM FLOWFILE WHERE lat IS NOT NULL AND lon IS NOT NULL AND sensor_id IS NOT NULL"
+                }
+            },
+            {
+                "identifier": "convert-record",
+                "name": "ConvertRecord",
+                "type": "org.apache.nifi.processors.standard.ConvertRecord",
+                "properties": {
+                    "Record Reader": "csv-reader",
+                    "Record Writer": "json-writer"
+                }
+            },
+            {
+                "identifier": "publish-kafka",
+                "name": "PublishKafkaRecord_2_0",
+                "type": "org.apache.nifi.processors.kafka.pubsub.PublishKafkaRecord_2_0",
+                "properties": {
+                    "Topic Name": "sensor_bme280_topic",
+                    "Record Reader": "json-reader",
+                    "Delivery Guarantee": "1"
+                }
+            }
+        ],
+        "connections": [
+            {
+                "identifier": "conn-fetch-to-query",
+                "source": {
+                    "id": "fetch-file"
+                },
+                "destination": {
+                    "id": "query-record"
+                },
+                "backPressureObjectThreshold": 100,
+                "backPressureDataSizeThreshold": "10 MB"
+            },
+            {
+                "identifier": "conn-query-to-convert",
+                "source": {
+                    "id": "query-record",
+                    "groupId": "valid_records"
+                },
+                "destination": {
+                    "id": "convert-record"
+                }
+            },
+            {
+                "identifier": "conn-convert-to-kafka",
+                "source": {
+                    "id": "convert-record"
+                },
+                "destination": {
+                    "id": "publish-kafka"
+                },
+                "prioritizers": [
+                    "org.apache.nifi.prioritizer.NewestFlowFileFirstPrioritizer"
+                ]
+            }
+        ]
+    }
+}
