@@ -162,18 +162,6 @@
                 "value": "bytes"
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "peak_cpu_pct"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "percent"
-              }
-            ]
           }
         ]
       },
@@ -207,10 +195,9 @@
             "indexByName": {
               "duration_sec": 1,
               "event_time": 0,
-              "peak_cpu_pct": 2,
-              "peak_mem": 5,
-              "rows_per_sec": 3,
-              "written_rows": 4
+              "peak_mem": 4,
+              "rows_per_sec": 2,
+              "written_rows": 3
             },
             "renameByName": {}
           }
@@ -225,7 +212,7 @@
           },
           "format": 0,
           "queryType": "sql",
-          "rawSql": "SELECT event_time, round(query_duration_ms / 1000, 2) as duration_sec, round(ProfileEvents['OSCPUTimeNano'] / (query_duration_ms * 1000000 + 1) * 100, 2) as peak_cpu_pct, written_rows, round(written_rows / (query_duration_ms / 1000 + 0.001), 0) as rows_per_sec, memory_usage as peak_mem FROM system.query_log WHERE query LIKE 'INSERT INTO sensor_storage.%' AND type = 'QueryFinish' ORDER BY event_time ASC SETTINGS use_query_cache = 0",
+          "rawSql": "SELECT event_time, round(query_duration_ms / 1000, 2) as duration_sec, written_rows, round(written_rows / (query_duration_ms / 1000 + 0.001), 0) as rows_per_sec, memory_usage as peak_mem FROM system.query_log WHERE query LIKE 'INSERT INTO sensor_storage.%' AND type = 'QueryFinish' ORDER BY event_time ASC SETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
@@ -293,6 +280,13 @@
               {
                 "id": "unit",
                 "value": "µg/m³"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -305,6 +299,13 @@
               {
                 "id": "unit",
                 "value": "µg/m³"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -317,6 +318,13 @@
               {
                 "id": "unit",
                 "value": "celsius"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -329,6 +337,13 @@
               {
                 "id": "unit",
                 "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
               }
             ]
           }
@@ -353,7 +368,7 @@
           "sort": "none"
         }
       },
-      "title": "Data preview",
+      "title": "BME280 & SDS011 Data Visualization",
       "type": "timeseries",
       "targets": [
         {
@@ -363,7 +378,7 @@
           },
           "format": 1,
           "queryType": "sql",
-          "rawSql": "SELECT \n    s.timestamp AS time,\n    s.P2 AS pm25,\n    s.P1 AS pm10,\n    b.temperature,\n    b.humidity\nFROM sensor_storage.sds011_data AS s\nASOF LEFT JOIN sensor_storage.bme280_data AS b \n    ON s.location = b.location AND s.timestamp >= b.timestamp\nWHERE s.timestamp >= '2026-04-17 00:00:00' AND s.timestamp < '2026-04-18 00:00:00'\nORDER BY s.timestamp ASC\nSETTINGS use_query_cache = 0",
+          "rawSql": "SELECT \n    timestamp AS time,\n    humidity,\n    temperature,\n    pm10,\n    pm25\nFROM sensor_storage.combined_data\nWHERE location = '$location' AND $__timeFilter(timestamp)\nORDER BY timestamp ASC\nSETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
@@ -391,8 +406,7 @@
                 "value": 50
               }
             ]
-          },
-          "unit": "percent"
+          }
         },
         "overrides": []
       },
@@ -413,7 +427,7 @@
         },
         "showHeader": true
       },
-      "title": "Sudden PM2.5 Spikes (>50%)",
+      "title": "Sustained Dangerous PM2.5 (>50 µg/m³)",
       "type": "table",
       "targets": [
         {
@@ -423,7 +437,7 @@
           },
           "format": 0,
           "queryType": "sql",
-          "rawSql": "SELECT * FROM (SELECT timestamp, P2 as pm25, lag(P2) OVER (ORDER BY timestamp ASC) as prev_pm25, round(abs(P2 - prev_pm25) / (prev_pm25 + 0.1) * 100, 2) AS percent_change FROM sensor_storage.sds011_data) WHERE prev_pm25 > 0 AND percent_change > 50 ORDER BY timestamp DESC LIMIT 20 SETTINGS use_query_cache = 0",
+          "rawSql": "SELECT timestamp, pm25 FROM (\n    SELECT \n        timestamp, \n        pm25, \n        lead(pm25, 1) OVER (ORDER BY timestamp ASC) as next_1, \n        lead(pm25, 2) OVER (ORDER BY timestamp ASC) as next_2 \n    FROM sensor_storage.combined_data \n    WHERE location = '$location' AND $__timeFilter(timestamp)\n) \nWHERE pm25 > 150 AND next_1 > 150 AND next_2 > 150 \nORDER BY timestamp DESC \nLIMIT 20 \nSETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
@@ -459,7 +473,7 @@
           "values": false
         }
       },
-      "title": "Air Cleanse Events (High Humidity -> Low Dust)",
+      "title": "Top 10 Hottest Locations (Average)",
       "type": "table",
       "targets": [
         {
@@ -469,7 +483,7 @@
           },
           "format": 0,
           "queryType": "sql",
-          "rawSql": "SELECT level, count() AS num_events FROM (SELECT windowFunnel(1800)(timestamp, humidity > 90, P2 < 15) AS level FROM (SELECT s.timestamp, b.humidity, s.P2 FROM sensor_storage.sds011_data AS s ASOF LEFT JOIN sensor_storage.bme280_data AS b ON s.location = b.location AND s.timestamp >= b.timestamp ORDER BY s.timestamp ASC)) GROUP BY level ORDER BY level SETTINGS use_query_cache = 0",
+          "rawSql": "SELECT \n    location, \n    round(avg(temperature), 2) AS avg_temperature, \n    round(avg(humidity), 2) AS avg_humidity \nFROM sensor_storage.combined_data \nWHERE $__timeFilter(timestamp) AND temperature > 0\nGROUP BY location \nORDER BY avg_temperature DESC \nLIMIT 10 \nSETTINGS use_query_cache = 0",
           "refId": "A"
         }
       ]
@@ -484,6 +498,30 @@
     "sds011",
     "analytics"
   ],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ClickHouse"
+        },
+        "definition": "SELECT DISTINCT location FROM sensor_storage.sds011_data",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Location",
+        "multi": false,
+        "name": "location",
+        "options": [],
+        "query": "SELECT DISTINCT location FROM sensor_storage.sds011_data",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
   "time": {
     "from": "2026-04-17T00:00:00Z",
     "to": "2026-04-17T23:59:59Z"
