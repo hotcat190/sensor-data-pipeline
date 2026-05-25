@@ -9,3 +9,10 @@ Open clickstack terminal:
         docker exec -it clickstack clickhouse-client --user default
     - bash:
         docker exec -it clickstack bash
+
+run init_sensor_storage.sql:
+Get-Content init/init_sensor_storage.sql | docker exec -i clickstack clickhouse-client --host ch-server
+
+run tests:
+pip install -r tests/requirements.txt
+python tests/verify_pipeline.py

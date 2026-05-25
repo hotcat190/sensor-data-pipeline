@@ -30,6 +30,8 @@ services:
     environment:
       - SINGLE_USER_CREDENTIALS_USERNAME=admin
       - SINGLE_USER_CREDENTIALS_PASSWORD=Password1234
+    volumes:
+      - ./input-drop-zone:/input-drop-zone
     networks:
       - shared
 

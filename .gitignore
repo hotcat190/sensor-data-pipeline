@@ -1,3 +1,7 @@
 clickhouse-bme-data/
 clickhouse-sds-data/
 .venv
+venv
+combined_sds
+combined_sds.zip
+input-drop-zone/
