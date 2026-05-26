@@ -5,3 +5,5 @@ venv
 combined_sds
 combined_sds.zip
 input-drop-zone/
+clickhouse-bme-data.zip
+clickhouse-sds-data.zip
