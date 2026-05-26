@@ -34,10 +34,10 @@ Open your system's hosts file (/etc/hosts or C:\Windows\System32\drivers\etc\hos
 `127.0.0.1 example.com`
 port-forward
 ```
-kubectl port-forward svc/my-nifi-http 8443:8443 -n nifi
+kubectl port-forward pod/my-nifi-0 8443:8443 -n nifi
 ```
 # Open https://example.com:8443/nifi
-# Default credentials: admin / Password1234
+# Default credentials: admin@company.com / Password1234
 
 # Troubleshooting
 ## PersistentVolumeClaims
@@ -68,6 +68,23 @@ kubectl get secrets -n nifi | findstr nifi
 kubectl exec -n nifi -it my-nifi-0 -- curl -k http://keycloak.nifi.svc.cluster.local:80/.well-known/openid-configuration
 ```
 
+## Login errors
+```diff
+diff --git a/cert.yaml b/cert.yaml
+--- a/cert.yaml
++++ b/cert.yaml
+@@ -18,4 +18,6 @@
+     {{- include "nifi.hostNodeList" . | nindent 4 }}
+     {{- include "nifi.ingressNodeList" . | nindent 4 }}
++  ipAddresses:
++    - 0.0.0.0
+   usages:
+     - server auth
+```
+```
+kubectl delete secret my-nifi-tls -n nifi
+```
+
 # Monitoring
 ```
 kubectl get pods -n nifi -w
@@ -84,4 +101,9 @@ helm upgrade my-nifi apache-nifi-helm -f apache-nifi-helm/values.yaml -n nifi --
 # Rollout restart
 ```
 kubectl rollout restart statefulset my-nifi -n nifi
+```
+
+# Uninstall
+```
+helm uninstall my-nifi -n nifi
 ```

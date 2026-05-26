@@ -1,3 +1,6 @@
 [submodule "apache-nifi-helm"]
 	path = apache-nifi-helm
 	url = https://github.com/hotcat190/apache-nifi-helm
+[submodule "k8s-nifi-cluster"]
+	path = k8s-nifi-cluster
+	url = https://github.com/hotcat190/k8s-nifi-cluster.git

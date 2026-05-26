@@ -26,15 +26,14 @@ NiFi fetches OIDC metadata from the configuration discovery URL and passes those
 
 1. Open your machine's host file (`/etc/hosts` on Linux/macOS or `C:\Windows\System32\drivers\etc\hosts` on Windows) and map the cluster-internal DNS name of Keycloak to your localhost IP address:
 ```text
-127.0.0.1 keycloak-headless.nifi.svc.cluster.local
+127.0.0.1 keycloak.nifi.svc.cluster.local
 
 ```
 
 
 2. Start a persistent port-forwarding session to route traffic from your machine over to the service:
 ```bash
-kubectl port-forward svc/keycloak-headless 8080:8080 -n nifi
-
+kubectl port-forward svc/keycloak 80:80 -n nifi
 ```
 
 
