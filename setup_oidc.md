@@ -45,7 +45,7 @@ kubectl port-forward svc/keycloak-headless 8080:8080 -n nifi
 2. Navigate to **Clients** and click **Create client**.
 3. Set the **Client ID** to `nifi-client`.
 4. On the capability config screen, ensure **Client authentication** is toggled to **On** (Confidential access type).
-5. On login settigns, Set the **Valid redirect URIs** to `https://example.com/*` and `https://example.com:8443/*` (or the specific hostname configured in your Ingress parameters).
+5. On login settigns, Set the **Valid redirect URIs** to `https://example.com/*` and `https://example.com:8443/nifi-api/access/oidc/callback` (or the specific hostname configured in your Ingress parameters).
 6. Save the client configuration, switch over to the **Credentials** tab, and copy the generated **Client Secret** value string.
 7. Go to **Users**, click **Add user**, and set the username and email to `admin@company.com`. Under the **Credentials** tab for that user, configure a permanent login password.
 

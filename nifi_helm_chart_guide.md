@@ -36,7 +36,7 @@ port-forward
 ```
 kubectl port-forward svc/my-nifi-http 8443:8443 -n nifi
 ```
-# Open https://localhost:8443/nifi
+# Open https://example.com:8443/nifi
 # Default credentials: admin / Password1234
 
 # Troubleshooting
