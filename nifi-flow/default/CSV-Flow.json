@@ -2194,7 +2194,7 @@
         "File not Found Log Level" : "ERROR",
         "Permission Denied Log Level" : "ERROR",
         "File to Fetch" : "${absolute.path}/${filename}",
-        "Completion Strategy" : "None"
+        "Completion Strategy" : "Delete File"
       },
       "propertyDescriptors" : {
         "Move Conflict Strategy" : {
@@ -2670,7 +2670,7 @@
       "name" : "LogAttribute",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : 1336.0,
+        "x" : 1304.0,
         "y" : -568.0
       },
       "properties" : {
@@ -3467,6 +3467,6 @@
   "snapshotMetadata" : {
     "author" : "admin",
     "flowIdentifier" : "CSV-Flow",
-    "timestamp" : 1779984380670
+    "timestamp" : 1779988104905
   }
 }
