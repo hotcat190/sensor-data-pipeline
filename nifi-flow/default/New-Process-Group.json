@@ -1429,7 +1429,7 @@
       "penaltyDuration" : "30 sec",
       "position" : {
         "x" : -1536.0,
-        "y" : -656.0
+        "y" : -632.0
       },
       "properties" : {
         "Max String Length" : "20 MB",
@@ -1598,8 +1598,8 @@
       "name" : "LogAttribute",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : -1528.0,
-        "y" : -456.0
+        "x" : -1544.0,
+        "y" : -416.0
       },
       "properties" : {
         "Log FlowFile Properties" : "true",
@@ -1709,8 +1709,8 @@
       "name" : "PublishKafka",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : 2432.0,
-        "y" : -304.0
+        "x" : 2416.0,
+        "y" : -336.0
       },
       "properties" : {
         "compression.type" : "none",
@@ -2424,8 +2424,8 @@
       "name" : "QueryRecord",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : 1704.0,
-        "y" : -288.0
+        "x" : 1712.0,
+        "y" : -328.0
       },
       "properties" : {
         "Include Zero Record FlowFiles" : "true",
@@ -2507,8 +2507,8 @@
       "name" : "JoltTransformJSON",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : 640.0,
-        "y" : -288.0
+        "x" : 656.0,
+        "y" : -320.0
       },
       "properties" : {
         "JSON Source" : "FLOW_FILE",
@@ -2932,8 +2932,8 @@
       "name" : "GenerateFlowFile_CityNames",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : -2208.0,
-        "y" : -656.0
+        "x" : -2200.0,
+        "y" : -624.0
       },
       "properties" : {
         "File Size" : "0B",
@@ -3244,7 +3244,7 @@
       "name" : "LogAttribute",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : 640.0,
+        "x" : 656.0,
         "y" : -8.0
       },
       "properties" : {
@@ -3355,8 +3355,8 @@
       "name" : "LogAttribute",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : -40.0,
-        "y" : 16.0
+        "x" : -56.0,
+        "y" : 8.0
       },
       "properties" : {
         "Log FlowFile Properties" : "true",
@@ -3785,6 +3785,6 @@
   "snapshotMetadata" : {
     "author" : "admin",
     "flowIdentifier" : "New-Process-Group",
-    "timestamp" : 1779721114498
+    "timestamp" : 1779976712863
   }
 }
