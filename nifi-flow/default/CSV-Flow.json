@@ -19,6 +19,36 @@
       "destination" : {
         "comments" : "",
         "groupId" : "flow-contents-group",
+        "id" : "f1c2e65d-99ef-32ed-9f94-cb1fe527aff7",
+        "name" : "QueryRecord",
+        "type" : "PROCESSOR"
+      },
+      "flowFileExpiration" : "0 sec",
+      "groupIdentifier" : "flow-contents-group",
+      "identifier" : "2878834f-2b3a-33ed-9dde-bc15ea43dfb0",
+      "labelIndex" : 0,
+      "loadBalanceCompression" : "DO_NOT_COMPRESS",
+      "loadBalanceStrategy" : "DO_NOT_LOAD_BALANCE",
+      "name" : "",
+      "partitioningAttribute" : "",
+      "prioritizers" : [ "org.apache.nifi.prioritizer.PriorityAttributePrioritizer" ],
+      "selectedRelationships" : [ "success" ],
+      "source" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
+        "id" : "82aa62d5-b1ad-37dd-ae8c-8a50f222c5cc",
+        "name" : "UpdateAttribute",
+        "type" : "PROCESSOR"
+      },
+      "zIndex" : 21
+    }, {
+      "backPressureDataSizeThreshold" : "1 GB",
+      "backPressureObjectThreshold" : 10000,
+      "bends" : [ ],
+      "componentType" : "CONNECTION",
+      "destination" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
         "id" : "a1a6475e-c21d-3ef3-9448-2dfe98e19c67",
         "name" : "LogAttribute",
         "type" : "PROCESSOR"
@@ -41,6 +71,36 @@
         "type" : "PROCESSOR"
       },
       "zIndex" : 3
+    }, {
+      "backPressureDataSizeThreshold" : "1 GB",
+      "backPressureObjectThreshold" : 10000,
+      "bends" : [ ],
+      "componentType" : "CONNECTION",
+      "destination" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
+        "id" : "82aa62d5-b1ad-37dd-ae8c-8a50f222c5cc",
+        "name" : "UpdateAttribute",
+        "type" : "PROCESSOR"
+      },
+      "flowFileExpiration" : "0 sec",
+      "groupIdentifier" : "flow-contents-group",
+      "identifier" : "94a7b87a-d945-3d89-a423-c96d6d6edbd8",
+      "labelIndex" : 0,
+      "loadBalanceCompression" : "DO_NOT_COMPRESS",
+      "loadBalanceStrategy" : "DO_NOT_LOAD_BALANCE",
+      "name" : "",
+      "partitioningAttribute" : "",
+      "prioritizers" : [ ],
+      "selectedRelationships" : [ "success" ],
+      "source" : {
+        "comments" : "",
+        "groupId" : "flow-contents-group",
+        "id" : "1283ec7e-cbe8-3ac8-85dc-afeaef0c666c",
+        "name" : "FetchFile",
+        "type" : "PROCESSOR"
+      },
+      "zIndex" : 20
     }, {
       "backPressureDataSizeThreshold" : "1 GB",
       "backPressureObjectThreshold" : 10000,
@@ -181,7 +241,7 @@
       "loadBalanceStrategy" : "DO_NOT_LOAD_BALANCE",
       "name" : "",
       "partitioningAttribute" : "",
-      "prioritizers" : [ ],
+      "prioritizers" : [ "org.apache.nifi.prioritizer.PriorityAttributePrioritizer" ],
       "selectedRelationships" : [ "bme" ],
       "source" : {
         "comments" : "",
@@ -221,36 +281,6 @@
         "type" : "PROCESSOR"
       },
       "zIndex" : 1
-    }, {
-      "backPressureDataSizeThreshold" : "1 GB",
-      "backPressureObjectThreshold" : 10000,
-      "bends" : [ ],
-      "componentType" : "CONNECTION",
-      "destination" : {
-        "comments" : "",
-        "groupId" : "flow-contents-group",
-        "id" : "f1c2e65d-99ef-32ed-9f94-cb1fe527aff7",
-        "name" : "QueryRecord",
-        "type" : "PROCESSOR"
-      },
-      "flowFileExpiration" : "0 sec",
-      "groupIdentifier" : "flow-contents-group",
-      "identifier" : "e9d21bec-281c-30d8-9a52-08b526545b50",
-      "labelIndex" : 0,
-      "loadBalanceCompression" : "DO_NOT_COMPRESS",
-      "loadBalanceStrategy" : "DO_NOT_LOAD_BALANCE",
-      "name" : "",
-      "partitioningAttribute" : "",
-      "prioritizers" : [ ],
-      "selectedRelationships" : [ "success" ],
-      "source" : {
-        "comments" : "",
-        "groupId" : "flow-contents-group",
-        "id" : "1283ec7e-cbe8-3ac8-85dc-afeaef0c666c",
-        "name" : "FetchFile",
-        "type" : "PROCESSOR"
-      },
-      "zIndex" : 29
     } ],
     "controllerServices" : [ {
       "bulletinLevel" : "WARN",
@@ -2156,8 +2186,8 @@
       "name" : "FetchFile",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : -696.0,
-        "y" : -576.0
+        "x" : -1352.0,
+        "y" : -568.0
       },
       "properties" : {
         "Move Conflict Strategy" : "Rename",
@@ -2238,8 +2268,8 @@
       "name" : "ListFile",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : -1352.0,
-        "y" : -584.0
+        "x" : -2008.0,
+        "y" : -576.0
       },
       "properties" : {
         "Minimum File Age" : "0 sec",
@@ -2420,7 +2450,7 @@
       "retryCount" : 10,
       "runDurationMillis" : 0,
       "scheduledState" : "ENABLED",
-      "schedulingPeriod" : "1 min",
+      "schedulingPeriod" : "0.05 sec",
       "schedulingStrategy" : "TIMER_DRIVEN",
       "style" : { },
       "type" : "org.apache.nifi.processors.standard.ListFile",
@@ -2733,6 +2763,79 @@
       "type" : "org.apache.nifi.processors.standard.LogAttribute",
       "yieldDuration" : "1 sec"
     }, {
+      "autoTerminatedRelationships" : [ ],
+      "backoffMechanism" : "PENALIZE_FLOWFILE",
+      "bulletinLevel" : "WARN",
+      "bundle" : {
+        "artifact" : "nifi-update-attribute-nar",
+        "group" : "org.apache.nifi",
+        "version" : "2.8.0"
+      },
+      "comments" : "",
+      "componentType" : "PROCESSOR",
+      "concurrentlySchedulableTaskCount" : 1,
+      "executionNode" : "ALL",
+      "groupIdentifier" : "flow-contents-group",
+      "identifier" : "82aa62d5-b1ad-37dd-ae8c-8a50f222c5cc",
+      "maxBackoffPeriod" : "10 mins",
+      "name" : "UpdateAttribute",
+      "penaltyDuration" : "30 sec",
+      "position" : {
+        "x" : -680.0,
+        "y" : -568.0
+      },
+      "properties" : {
+        "Store State" : "Do not store state",
+        "Cache Value Lookup Cache Size" : "100",
+        "priority" : "${filename:substring(0, 4):toNumber():ge(2022):toString():ifElse('1', '2')}"
+      },
+      "propertyDescriptors" : {
+        "Delete Attributes Expression" : {
+          "displayName" : "Delete Attributes Expression",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Delete Attributes Expression",
+          "sensitive" : false
+        },
+        "Store State" : {
+          "displayName" : "Store State",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Store State",
+          "sensitive" : false
+        },
+        "Cache Value Lookup Cache Size" : {
+          "displayName" : "Cache Value Lookup Cache Size",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Cache Value Lookup Cache Size",
+          "sensitive" : false
+        },
+        "Stateful Variables Initial Value" : {
+          "displayName" : "Stateful Variables Initial Value",
+          "dynamic" : false,
+          "identifiesControllerService" : false,
+          "name" : "Stateful Variables Initial Value",
+          "sensitive" : false
+        },
+        "priority" : {
+          "displayName" : "priority",
+          "dynamic" : true,
+          "identifiesControllerService" : false,
+          "name" : "priority",
+          "sensitive" : false
+        }
+      },
+      "retriedRelationships" : [ ],
+      "retryCount" : 10,
+      "runDurationMillis" : 25,
+      "scheduledState" : "ENABLED",
+      "schedulingPeriod" : "0 sec",
+      "schedulingStrategy" : "TIMER_DRIVEN",
+      "style" : { },
+      "type" : "org.apache.nifi.processors.attributes.UpdateAttribute",
+      "yieldDuration" : "1 sec"
+    }, {
       "autoTerminatedRelationships" : [ "success" ],
       "backoffMechanism" : "PENALIZE_FLOWFILE",
       "bulletinLevel" : "WARN",
@@ -2751,8 +2854,8 @@
       "name" : "LogAttribute",
       "penaltyDuration" : "30 sec",
       "position" : {
-        "x" : -696.0,
-        "y" : -840.0
+        "x" : -1352.0,
+        "y" : -864.0
       },
       "properties" : {
         "Log FlowFile Properties" : "true",
@@ -3170,7 +3273,7 @@
       "penaltyDuration" : "30 sec",
       "position" : {
         "x" : -48.0,
-        "y" : -584.0
+        "y" : -568.0
       },
       "properties" : {
         "Include Zero Record FlowFiles" : "true",
@@ -3364,6 +3467,6 @@
   "snapshotMetadata" : {
     "author" : "admin",
     "flowIdentifier" : "CSV-Flow",
-    "timestamp" : 1779976734376
+    "timestamp" : 1779984380670
   }
 }
